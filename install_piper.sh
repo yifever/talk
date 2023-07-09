@@ -1,16 +1,17 @@
 #!/bin/bash
 #!/bin/bash
 
-# Check for help flag
-if [[ "$@" == "--help" || "$@" == "-h" ]]; then
-  echo "Usage: source install_piper.sh [download=value] [model=value]"
-  echo "   download: Set to true to download. Default is true."
-  echo "   model: Set the model number. Default is 2."
-  return  # Use return here because the script is sourced, not executed
-fi
-
 # Wrap this function so temp environment variables don't leak
 function main() {
+     
+    # Check for help flag
+    if [[ "$@" == "--help" || "$@" == "-h" ]]; then
+      echo "Usage: source install_piper.sh [download=value] [model=value]"
+      echo "   download: Set to true to download. Default is true."
+      echo "   model: Set the model number. Default is 2."
+      return  # Use return here because the script is sourced, not executed
+    fi
+
     download=${1#*=}
     model=${2#*=}
     download=${download:-true}
