@@ -117,8 +117,8 @@ if [[ $DOWNLOAD_CHOICE == "y" || $DOWNLOAD_CHOICE == "Y" ]]; then
 
     read -p "Set the audio listner: [s]ample_audio/[r]ecord_audio " AUDIO_LISTENER 
     case $AUDIO_LISTENER in
-        r|record_audio) 
-            AUDIO_LISTENER_SCRIPT="record_audio.sh"
+        s|sample_audio) 
+            AUDIO_LISTENER_SCRIPT="sample_audio.sh"
             ;;
         *)
             AUDIO_LISTENER_SCRIPT="sample_audio.sh"
