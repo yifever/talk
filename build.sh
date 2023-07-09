@@ -76,15 +76,15 @@ echo "Compiling llama.cpp server"
 if [[ $(uname -m) == "arm64" ]]; then
     echo "Building llama.ccp for Apple silicon..."
     # TODO server setup will be deprecated by new llama.cpp change
-    mkdir build_server
+    mkdir -p build_server
     cd build_server
-    cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_METAL=ON
+    cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_METAL=ON ..
     cmake --build . --config Release
 else
     echo "Building llama.ccp for non Apple silicon..."
-    mkdir build_server
+    mkdir -p build_server
     cd build_server
-    cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_CUBLAS=$CUBLAS_FLAG_CMAKE
+    cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_CUBLAS=$CUBLAS_FLAG_CMAKE ..
     cmake --build . --config Release
 fi
 
