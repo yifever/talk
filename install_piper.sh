@@ -34,8 +34,6 @@ if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
 
     cd ../../
 
-    export PATH=$PATH:$PWD/plugins/voice/piper
-
 fi
 
 
@@ -74,5 +72,5 @@ if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
     else
         echo "Voice model downloaded failed. Please errors and try again."
     fi
-
 fi
+export PATH=$PATH:$PWD/plugins/voice/piper
