@@ -6,16 +6,17 @@ function main() {
      
     # Check for help flag
     if [[ "$@" == "--help" || "$@" == "-h" ]]; then
-      echo "Usage: source install_piper.sh [download=value] [model=value]"
+      echo "Usage: source install_piper.sh [download] [model]"
       echo "   download: Set to true to download. Default is true."
-      echo "   model: Set the model number. Default is 2."
+      echo "   model: Set the model number. Default is 1."
+      echo "     set to -1 to skip model download."
       return  # Use return here because the script is sourced, not executed
     fi
 
     download=${1#*=}
     model=${2#*=}
     download=${download:-true}
-    model=${model:-2}
+    model=${model:-1}
 
     # Determine system architecture
     ARCH=$(uname -m)
@@ -32,7 +33,7 @@ function main() {
         exit 1
     fi
 
-    if [ $download ]; then
+    if [ $download == true ]; then
 
         # Download and extract Piper
 
@@ -51,7 +52,7 @@ function main() {
 
     BASE_VOICE_MODEL_URL="https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2"
 
-    if [ $download ]; then
+    if [ $model != -1 ]; then
 
         # Use the GitHub API to get a list of voice assets
         VOICE_DATA=$(curl -s https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2)
@@ -82,6 +83,8 @@ function main() {
         else
             echo "Voice model downloaded failed. Please errors and try again."
         fi
+
+        cd ../..
     fi
 }
 
