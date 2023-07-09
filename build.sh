@@ -75,16 +75,19 @@ cd llama.cpp
 echo "Compiling llama.cpp server"
 if [[ $(uname -m) == "arm64" ]]; then
     echo "Building llama.ccp for Apple silicon..."
+    # TODO server setup will be deprecated by new llama.cpp change
+    mkdir build_server && cd build_server
     cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_METAL=ON
     cmake --build . --config Release
 else
     echo "Building llama.ccp for non Apple silicon..."
+    mkdir build_server && cd build_server
     cmake -DLLAMA_BUILD_SERVER=ON -DLLAMA_CUBLAS=$CUBLAS_FLAG_CMAKE
     cmake --build . --config Release
 fi
 
 # Navigate back to the root directory
-cd ../
+cd ../../
 
 # Prompt the user for whether they want to download models or not
 read -p "Do you want to download models? [y/n] " DOWNLOAD_CHOICE
@@ -121,17 +124,17 @@ if [[ $DOWNLOAD_CHOICE == "y" || $DOWNLOAD_CHOICE == "Y" ]]; then
             AUDIO_LISTENER_SCRIPT="sample_audio.sh"
             ;;
         *)
-            AUDIO_LISTENER_SCRIPT="sample_audio.sh"
+            AUDIO_LISTENER_SCRIPT="record_audio.sh"
             ;;
     esac
 
     # Update model paths in new config.json
     echo "Creating new config.json..."
     echo '{
-        "whisperModelPath": "'models/whisper/$WHISPER_MODEL_NAME'",
+        "whisperModelPath": "'./models/whisper/$WHISPER_MODEL_NAME'",
         "audioListenerScript": "'$AUDIO_LISTENER_SCRIPT'",
         "lora": "",
-        "piperModelPath": "~/models/piper/en-gb-southern_english_female-low.onnx",
+        "piperModelPath": "./models/piper/en-gb-southern_english_female-low.onnx",
         "voiceActivityDetectionEnabled": true
     }' > config.json
 else
