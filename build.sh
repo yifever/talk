@@ -114,32 +114,36 @@ if [[ $DOWNLOAD_CHOICE == "y" || $DOWNLOAD_CHOICE == "Y" ]]; then
     curl -L $LLAMA_MODEL_URL -o models/llama/$LLAMA_MODEL_NAME
     curl -L $WHISPER_MODEL_URL -o models/whisper/$WHISPER_MODEL_NAME
 
-    # Backup existing config.json
-    echo "Backing up existing config.json..."
-    cp config.json config.json.bkp
-
-    read -p "Set the audio listner: [s]ample_audio/[r]ecord_audio " AUDIO_LISTENER 
-    case $AUDIO_LISTENER in
-        s|sample_audio) 
-            AUDIO_LISTENER_SCRIPT="sample_audio.sh"
-            ;;
-        *)
-            AUDIO_LISTENER_SCRIPT="record_audio.sh"
-            ;;
-    esac
-
-    # Update model paths in new config.json
-    echo "Creating new config.json..."
-    echo '{
-        "whisperModelPath": "'./models/whisper/$WHISPER_MODEL_NAME'",
-        "audioListenerScript": "'$AUDIO_LISTENER_SCRIPT'",
-        "lora": "",
-        "piperModelPath": "./models/piper/en-gb-southern_english_female-low.onnx",
-        "voiceActivityDetectionEnabled": true
-    }' > config.json
 else
     echo "Skipping model download..."
+    echo "Please put the models in ./models/{llama/whisper}/"
+    echo "And edit whisperModelPath in config.json later."
+    WHISPER_MODEL_NAME="ggml-tiny.en.bin"
 fi
+
+# Backup existing config.json
+echo "Backing up existing config.json..."
+cp config.json config.json.bkp
+
+read -p "Set the audio listner: [s]ample_audio/[r]ecord_audio " AUDIO_LISTENER 
+case $AUDIO_LISTENER in
+    s|sample_audio) 
+        AUDIO_LISTENER_SCRIPT="sample_audio.sh"
+        ;;
+    *)
+        AUDIO_LISTENER_SCRIPT="record_audio.sh"
+        ;;
+esac
+
+# Update model paths in new config.json
+echo "Creating new config.json..."
+echo '{
+    "whisperModelPath": "'./models/whisper/$WHISPER_MODEL_NAME'",
+    "audioListenerScript": "'$AUDIO_LISTENER_SCRIPT'",
+    "lora": "",
+    "piperModelPath": "./models/piper/en-gb-southern_english_female-low.onnx",
+    "voiceActivityDetectionEnabled": true
+}' > config.json
 
 # End of script
 echo "Script completed successfully!"
