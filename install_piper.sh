@@ -9,14 +9,12 @@ if [[ "$@" == "--help" || "$@" == "-h" ]]; then
   return  # Use return here because the script is sourced, not executed
 fi
 
+# Wrap this function so temp environment variables don't leak
 function main() {
     download=${1#*=}
     model=${2#*=}
     download=${download:-true}
     model=${model:-2}
-
-    # Exit immediately if a command exits with a non-zero status
-    set -e
 
     # Determine system architecture
     ARCH=$(uname -m)
