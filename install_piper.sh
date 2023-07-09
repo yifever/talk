@@ -1,7 +1,6 @@
 #!/bin/bash
 #!/bin/bash
 
-# Wrap this function so temp environment variables don't leak
 function main() {
      
     # Check for help flag
@@ -13,10 +12,10 @@ function main() {
       return  # Use return here because the script is sourced, not executed
     fi
 
-    download=${1#*=}
-    model=${2#*=}
-    download=${download:-true}
-    model=${model:-1}
+    DOWNLOAD_=${1#*=}
+    MODEL_=${2#*=}
+    DOWNLOAD_=${DOWNLOAD_:-true}
+    MODEL_=${MODEL_:-1}
 
     # Determine system architecture
     ARCH=$(uname -m)
@@ -33,7 +32,7 @@ function main() {
         exit 1
     fi
 
-    if [ $download == true ]; then
+    if [ $DOWNLOAD_ == true ]; then
 
         # Download and extract Piper
 
@@ -52,7 +51,7 @@ function main() {
 
     BASE_VOICE_MODEL_URL="https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2"
 
-    if [ $model != -1 ]; then
+    if [ $MODEL_ != -1 ]; then
 
         # Use the GitHub API to get a list of voice assets
         VOICE_DATA=$(curl -s https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2)
@@ -86,6 +85,9 @@ function main() {
 
         cd ../..
     fi
+
+    unset DOWNLOAD_
+    unset MODEL_
 }
 
 main "$@"
