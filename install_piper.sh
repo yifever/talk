@@ -1,5 +1,10 @@
 #!/bin/bash
 
+download=${1#*=}
+model=${2#*=}
+download=${download:-true}
+model=${model:-2}
+
 # Exit immediately if a command exits with a non-zero status
 set -e
 
@@ -18,9 +23,7 @@ else
     exit 1
 fi
 
-# Ask user for permission to install
-read -p "This will download and install Piper from $DOWNLOAD_LINK. Not needed if piper is already installed. Do you want to proceed? (y/n)" REPLY
-if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
+if [ $download ]; then
 
     # Download and extract Piper
 
@@ -38,9 +41,8 @@ fi
 
 
 BASE_VOICE_MODEL_URL="https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2"
-read -p "This script will download onnx piper models from from $BASE_VOICE_MODEL_URL. Not needed if you already have models downloaded. Do you want to proceed? (y/n) " REPLY
 
-if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
+if [ $download ]; then
 
     # Use the GitHub API to get a list of voice assets
     VOICE_DATA=$(curl -s https://api.github.com/repos/rhasspy/piper/releases/tags/v0.0.2)
@@ -55,10 +57,9 @@ if [[ $REPLY == "y" || $REPLY == "Y" ]]; then
     echo "$((i+1))) ${VOICE_NAMES[$i]}"
     done
 
-    read -p "Enter the number corresponding to your voice preference: " VOICE_NUM
 
     # Set voice download link based on user preference
-    VOICE_LINK="${VOICE_URLS[$((VOICE_NUM-1))]}"
+    VOICE_LINK="${VOICE_URLS[$model]}"
 
     # Download and extract voice
     mkdir -p models/piper
